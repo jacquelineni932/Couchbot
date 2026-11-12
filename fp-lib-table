@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "couchbot") (type "KiCad") (uri "/Users/jacquelineni/Documents/funsies/couchbot") (options "") (descr ""))
+)
