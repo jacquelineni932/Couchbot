@@ -1,0 +1,14 @@
+- Burn eFuse EFUSE_UART_PRINT_CONTROL = 1 so ROM boot messages never print on UART0 (GPIO8 is pulled high, which disables printing). UART0 TX is CAN_TXD and the transceiver is live at boot.
+- Set CONFIG_BOOTLOADER_LOG_LEVEL_NONE.
+- Console on USB Serial/JTAG only (CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG). Never use UART0 for logging.
+- Wi-Fi and Bluetooth disabled. The UJA1169 V1 regulator is limited to 250 mA.
+- TWAI (CAN): TX = GPIO21, RX = GPIO20.
+- UJA1169 SPI: SCK = GPIO4, MOSI = GPIO5, MISO = GPIO6, CS = GPIO7, mode 1 (CPOL 0, CPHA 1), 4 MHz max.
+- Leave UJA1169 in its factory Forced Normal mode (FNMC = 1): watchdog off, CAN and V2 on at power-up. If FNMC is ever cleared, firmware must turn V2 on over SPI or CAN stops working.
+- UJA1169 RSTN is wired to ESP EN, so an SBC reset hard-resets the ESP.
+- I2C: SDA = GPIO2, SCL = GPIO3, external 4.7k pull-ups already on board.
+- Encoder U2 is an AS5600 at 0x36, encoder U3 is an AS5600L at 0x40.
+- U2 DIR is tied to GND (angle increases clockwise), U3 DIR is tied to 3.3V (angle increases counterclockwise).
+- CAN address DIP switch: GPIO0 = bit 0, GPIO1 = bit 1, GPIO10 = bit 2. Enable internal pull-ups. Switch ON reads 0, so invert the bits. Addresses 0 to 7.
+- GPIO18/GPIO19 are USB D-/D+. Do not use them as GPIO.
+- To flash over USB: 12V on a DroneCAN connector, hold BOOT, tap RESET, release BOOT, then run esptool.
